@@ -67,7 +67,7 @@ class MineSweeper:
         self.board[y][x] = '.'
         expanding = [neighbour for neighbour in self.get_neighbours(y, x) if self.board[neighbour[0]][neighbour[1]] == 'x']
         while expanding:
-            vy,vx = expanding.pop()
+            vy, vx = expanding.pop()
             if self.board[vy][vx] == '.':
                 continue
 
@@ -84,15 +84,15 @@ class MineSweeper:
 
     def play_turn(self):
         self.print_board()
-        
+
         print MAKE_YOUR_MOVE
 
         command = stdin.readline().split()
-        
+
         if len(command) != 3 or not command[0] in 'fp' or not command[1].isdigit() or not command[2].isdigit():
             print UNKNOWN_COMMAND
             return
-        
+
         flagging = command[0] == 'f'
         r = int(command[1])-1
         c = int(command[2])-1
@@ -107,7 +107,7 @@ class MineSweeper:
                 return
 
             self.board[r][c] = 'f' if self.board[r][c] == 'x' else 'x'
-        
+
         else:
             if self.pristine:
                 self.place_mines(r, c)
