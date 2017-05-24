@@ -63,12 +63,11 @@ class MineSweeper:
 
         return neighbours
 
-    def handle_successful(self, y, x):
-        self.board[y][x] = '.'
-        expanding = [neighbour for neighbour in self.get_neighbours(y, x) if self.board[neighbour[0]][neighbour[1]] == 'x']
+    def handle_successful(self, y, x):        
+        expanding = [(y,x)] + [neighbour for neighbour in self.get_neighbours(y, x) if self.board[neighbour[0]][neighbour[1]] == 'x']
         while expanding:
             vy, vx = expanding.pop()
-            if self.board[vy][vx] == '.':
+            if self.board[vy][vx] == '.' or self.mine_mask[vy][vx]:
                 continue
 
             neighbours = self.get_neighbours(vy, vx)
@@ -77,7 +76,8 @@ class MineSweeper:
             if mine_count == 0:
                 self.board[vy][vx] = '.'
                 for neighbour in neighbours:
-                    if self.board[neighbour[0]][neighbour[1]] == 'x':
+                    neighy, neighx = neighbour
+                    if self.board[neighy][neighx] == 'x' and not self.mine_mask[neighy][neighx]:
                         expanding.append(neighbour)
                 continue
             self.board[vy][vx] = str(mine_count)
