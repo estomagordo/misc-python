@@ -58,7 +58,7 @@ class MineSweeper:
 
         for i in xrange(max(0, y-1), min(self.rows, y+2)):
             for j in xrange(max(0, x-1), min(self.cols, x+2)):
-                if i != 0 or j != 0:
+                if i != y or j != x:
                     neighbours.append((i, j))
 
         return neighbours
