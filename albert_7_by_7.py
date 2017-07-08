@@ -1,6 +1,5 @@
 from sys import argv
 from itertools import combinations
-from random import shuffle
 
 def multiply_between(start, end):
     return reduce(lambda x,y: x*y, range(start, end+1))
@@ -13,7 +12,6 @@ def look_for_of_size(n):
     maxperms = multiply_between(46-n, 45) / multiply_between(2, n)
     count = 0
     working = []
-    shuffle(tiles)
     
     for c in combinations(tiles, n):
         if all(any(x in s for x in c) for s in setlist):
