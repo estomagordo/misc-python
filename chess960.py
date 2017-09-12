@@ -1,7 +1,16 @@
 from itertools import permutations
 
-def mate_in_two(configuration):
+def get_pawn_row():
+    return ['P' for x in xrange(8)]
+    
+def get_empty_row():
+    return [' ' for x in xrange(8)]
 
+def build_board(configuration):
+    return list(configuration) + get_pawn_row() + get_empty_row() * 4 + get_pawn_row() + list(configuration)
+
+def mate_in_two(configuration):
+    board = build_board(configuration)
 
 def order_valid(order):
     rook_count = 0
