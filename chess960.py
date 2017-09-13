@@ -7,10 +7,22 @@ def get_empty_row():
     return [' ' for x in xrange(8)]
 
 def build_board(configuration):
-    return list(configuration) + get_pawn_row() + get_empty_row() * 4 + get_pawn_row() + list(configuration)
+    return map(lower, list(configuration)) + map(lower, get_pawn_row()) + get_empty_row() * 4 + get_pawn_row() + list(configuration)
+    
+ def white_mate(state):
+    return white_checked(state) and white_stuck(state)
 
 def mate_in_two(configuration):
-    board = build_board(configuration)
+    move_count = 0    
+    states = [build_board(configuration)]
+    
+    while move_count < 4:
+        new_states = []
+        for state in states:
+            new_states += all_moves(state, move_count % 2 == 0)
+        states = new_states
+        
+    return any(white_mate(state) for state in states)
 
 def order_valid(order):
     rook_count = 0
