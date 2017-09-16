@@ -1,5 +1,5 @@
 from itertools import permutations
-from copy import copy
+from copy import deepcopy
 
 def get_pawn_row():
     return ['P' for x in xrange(8)]
@@ -18,7 +18,7 @@ def all_black_moves(state):
         if first_move:
             if state[1][col] == 'p':
                 if state[2][col] == ' ':
-                    new_state = copy(state)
+                    new_state = deepcopy(state)
                     new_state[2][col] = 'p'
                     new_state[1][col] = ' '
                     moves.append(new_state)
@@ -35,7 +35,7 @@ def all_black_moves(state):
                     for dist in xrange(1, col + 1):
                         if state[dist][col - dist] != ' ':
                             break
-                        new_state = copy(state)
+                        new_state = deepcopy(state)
                         new_state[dist][col - dist] = back_piece
                         new_state[0][col] = ' '
                         moves.append(new_state)
@@ -43,7 +43,7 @@ def all_black_moves(state):
                     for dist in xrange(1, col + 1):
                         if state[dist][col + dist] != ' ':
                             break
-                        new_state = copy(state)
+                        new_state = deepcopy(state)
                         new_state[dist][col + dist] = back_piece
                         new_state[0][col] = ' '
                         moves.append(new_state)
@@ -56,12 +56,12 @@ def all_white_moves(state):
     for col in xrange(8):
         if state[6][col] == 'P':
             if state[5][col] == ' ':
-                new_state = copy(state)
+                new_state = deepcopy(state)
                 new_state[5][col] = 'P'
                 new_state[6][col] = ' '
                 moves.append(new_state)
                 if state[4][col] == ' ':
-                    new_state = copy(state)
+                    new_state = deepcopy(state)
                     new_state[4][col] = 'P'
                     new_state[6][col] = ' '
                     moves.append(new_state)
@@ -160,6 +160,7 @@ def mate_in_two(configuration):
                 new_states += all_white_moves(state)
             else:
                 new_states += all_black_moves(state)
+        # if move_count == 0: print new_states
         states = new_states
         
     return any(white_mate(state) for state in states)
