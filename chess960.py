@@ -22,11 +22,6 @@ def all_black_moves(state):
                     new_state[2][col] = 'p'
                     new_state[1][col] = ' '
                     moves.append(new_state)
-                    # if state[3][col] == ' ':
-                        # new_state = copy(state)
-                        # new_state[3][col] = 'p'
-                        # new_state[1][col] = ' '
-                        # moves.append(new_state)    
         else:
             back_piece = state[0][col]
         
