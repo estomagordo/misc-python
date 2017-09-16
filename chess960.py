@@ -67,9 +67,88 @@ def all_white_moves(state):
                     moves.append(new_state)
             
     return moves
+    
+def get_white_king_pos(state):
+    for row in xrange(8):
+        for col in xrange(8):
+            if state[row][col] == 'K':
+                return (row, col)
+    
+def get_checker(state):
+    y, x = get_white_king_pos(state)
+    
+    for left_dist in xrange(1, x + 1):
+        piece = state[y - left_dist][x - left_dist]
+        if piece in 'bq':
+            return (y - left_dist, x - left_dist)
+        if piece != ' ':
+            break
+            
+    for right_dist in xrange(1, 8 - x):
+        piece = state[y - right_dist][x + right_dist]
+        if piece in 'bq':
+            return (y - right_dist, x + right_dist)
+        if piece != ' ':
+            break
+            
+    return (-1, -1)
+    
+def king_can_escape(state, king, checker):
+    if state[king[0] - 1][king[1]] == ' ':
+        return True
+    if king[1] > checker[1]:
+        if king[1] < 7 and state[king[0]][king[1] + 1] == ' ':
+            return True
+    else:
+        if king[1] > 0 and state[king[0]][king[1] - 1] == ' ':
+            return True
+            
+    return False
+    
+def checker_can_be_taken(state, king, checker, include_king = True):
+    if include_king and abs(king[0] - checker[0]) < 2:
+        return True
+    if checker[1] > 0:
+        if state[checker[0] + 1][checker[1] - 1] == 'P':
+            return True
+        if state[checker[0] + 2][checker[1] - 1] == 'N':
+            return True
+    if checker[1] < 7:
+        if state[checker[0] + 1][checker[1] + 1] == 'P':
+            return True
+        if state[checker[0] + 2][checker[1] + 1] == 'N':
+            return True
+            
+    return False
+    
+def checker_can_be_blocked(state, king, checker):
+    if king[1] > checker[1]:
+        for steps in xrange(1, king[1] - checker[1]):
+            if checker_can_be_taken(state, king, (king[0] - steps, king[1] - steps), False):
+                return True
+    else:
+        for steps in xrange(1, checker[1] - king[1]):
+            if checker_can_be_taken(state, king, (king[0] + steps, king[1] + steps), False):
+                return True
+                
+    return False
+        
+def white_stuck(state, checker):
+    king = get_white_king_pos(state)
+    
+    if king_can_escape(state, king, checker):
+        return False
+    if checker_can_be_taken(state, king, checker):
+        return False
+    return not checker_can_be_blocked(state, king, checker)
 
 def white_mate(state):
-    return white_checked(state) and white_stuck(state)
+    checker = get_checker(state)
+    
+    if checker == (-1, -1):
+        return False
+        
+    return white_stuck(state, checker)
 
 def mate_in_two(configuration):
     states = [build_board(configuration)]
