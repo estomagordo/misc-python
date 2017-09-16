@@ -1,3 +1,12 @@
+# Aims to probe every possible Fischer random chess, or Chess960 variant for possible fool's mate variants (mate by black in two).
+# Uses a number of heuristics to speed up search, which allows it to doing expensive deepcopies as a core part of the algorithm, without the total runtime being too murderous.
+# For one, the only black pieces that can threaten a white king positioned at the first row are bishops and the queen.
+# A black knight can check a white king that has moved up one row. But in such occasions, after only two moves by either player, there is always safe ground for the white king, including its starting position.
+# So this means that the only black moves considered are a pawn move, followed by the moving of a bishop or the queen. The distance covered by the pawn does not matter.
+# White needs to move at least one pawn for its king to be threatened by a diagonally moving piece. It also turns out that since the diagonal threat would risk getting covered by a pawn otherwise,
+# another pawn, having moved "ahead" of the diagional threat line is also moved by necessity. Reducing white's move schedule to two pawn moves.
+# Note that this mean that the castling rules are irrelevant.
+
 from itertools import permutations
 from copy import deepcopy
 
