@@ -190,9 +190,9 @@ variant_count = 0
 backpieces = 'KQRRNNBB'
 
 for p in permutations(backpieces):
-    if order_valid(p):
-        mate_count += mate_in_two(p)
+    if not order_valid(p):
+        continue
         
     variant_count += 1
-    
+    mate_count += mate_in_two(p)
     print mate_count, '/', variant_count
