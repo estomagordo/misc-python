@@ -188,10 +188,13 @@ def order_valid(order):
 mate_count = 0
 variant_count = 0
 backpieces = 'KQRRNNBB'
+seen = set()
 
-for p in permutations(backpieces):
-    if not order_valid(p):
+for p in permutations(backpieces):    
+    if p in seen or not order_valid(p):
         continue
+        
+    seen.add(p)
         
     variant_count += 1
     mate_count += mate_in_two(p)
