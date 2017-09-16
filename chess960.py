@@ -8,7 +8,7 @@ def get_empty_row():
     return [' ' for x in xrange(8)]
 
 def build_board(configuration):
-    return map(lambda c: c.lower(), list(configuration)) + map(lambda c: c.lower(), get_pawn_row()) + get_empty_row() * 4 + get_pawn_row() + list(configuration)
+    return [map(lambda c: c.lower(), list(configuration))] + [map(lambda c: c.lower(), get_pawn_row())] + [get_empty_row()] * 4 + [get_pawn_row()] + [list(configuration)]
     
 def all_black_moves(state):
     moves = []
