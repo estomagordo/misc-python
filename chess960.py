@@ -8,7 +8,7 @@ def get_empty_row():
     return [' ' for x in xrange(8)]
 
 def build_board(configuration):
-    return [map(lambda c: c.lower(), list(configuration))] + [map(lambda c: c.lower(), get_pawn_row())] + [get_empty_row()] * 4 + [get_pawn_row()] + [list(configuration)]
+    return [map(lambda c: c.lower(), list(configuration))] + [map(lambda c: c.lower(), get_pawn_row())] + [get_empty_row()] + [get_empty_row()] + [get_empty_row()] + [get_empty_row()] + [get_pawn_row()] + [list(configuration)]
     
 def all_black_moves(state):
     moves = []
@@ -40,7 +40,7 @@ def all_black_moves(state):
                         new_state[0][col] = ' '
                         moves.append(new_state)
                 if col < 7 and state[1][col + 1] == ' ':
-                    for dist in xrange(1, col + 1):
+                    for dist in xrange(1, 8 - col):
                         if state[dist][col + dist] != ' ':
                             break
                         new_state = deepcopy(state)
@@ -109,14 +109,14 @@ def checker_can_be_taken(state, king, checker, include_king = True):
     if include_king and abs(king[0] - checker[0]) < 2:
         return True
     if checker[1] > 0:
-        if state[checker[0] + 1][checker[1] - 1] == 'P':
+        if checker[0] < 7 and state[checker[0] + 1][checker[1] - 1] == 'P':
             return True
-        if state[checker[0] + 2][checker[1] - 1] == 'N':
+        if checker[0] < 6 and state[checker[0] + 2][checker[1] - 1] == 'N':
             return True
     if checker[1] < 7:
-        if state[checker[0] + 1][checker[1] + 1] == 'P':
+        if checker[0] < 7 and state[checker[0] + 1][checker[1] + 1] == 'P':
             return True
-        if state[checker[0] + 2][checker[1] + 1] == 'N':
+        if checker[0] < 6 and state[checker[0] + 2][checker[1] + 1] == 'N':
             return True
             
     return False
@@ -128,7 +128,7 @@ def checker_can_be_blocked(state, king, checker):
                 return True
     else:
         for steps in xrange(1, checker[1] - king[1]):
-            if checker_can_be_taken(state, king, (king[0] + steps, king[1] + steps), False):
+            if checker_can_be_taken(state, king, (king[0] - steps, king[1] + steps), False):
                 return True
                 
     return False
